@@ -8,14 +8,24 @@ rejected : 작업의 요청이 거절된 상태
 작업시간이 오래걸리는 업무를 수행할때 promise로 반환하면 자동적으로 해당 작업 완료 이후 동기적으로 다음 작업을 선형화해서 수행 (es6)
 */
 
+const section = document.querySelector('section');
+
 fetch('DB/department.json')
-	.then((data) => {
-		//첫번째 then구문에서 받아진 promise를 다시 바로 리턴
-		//두번째 구문에서 해당 데이터를 동기적으로 활용 가능
-		return data.json();
-	})
+	.then((data) => data.json())
 	.then((json) => {
-		console.log(json);
+		let tags = '';
+		json.members.map((data) => {
+			tags += `
+      <article>
+      <div class='pic'>
+        <img src='img/${data.pic}'></img>
+      </div>
+      <h2>${data.position}</h2>
+      <p>${data.name}</p>
+      </article>
+      `;
+		});
+		section.innerHTML = tags;
 	})
 	.catch((err) => {
 		console.log(err);
